@@ -302,29 +302,55 @@ export default function MultipLayerMode() {
                 </h3>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    value={playerName}
-                    onChange={(e) => setPlayerName(e.target.value)}
-                    className="px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Session Code"
-                    value={sessionCode}
-                    onChange={(e) => setSessionCode(e.target.value.toUpperCase())}
-                    className="px-4 py-3 rounded-xl border border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Your Name *"
+                      value={playerName}
+                      onChange={(e) => setPlayerName(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all duration-200"
+                      required
+                    />
+                    {!playerName.trim() && (
+                      <div className="absolute -bottom-5 left-0 text-xs text-red-500">
+                        Name required to join
+                      </div>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Enter Session Code *"
+                      value={sessionCode}
+                      onChange={(e) => setSessionCode(e.target.value.toUpperCase())}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all duration-200"
+                      required
+                    />
+                    {!sessionCode.trim() && (
+                      <div className="absolute -bottom-5 left-0 text-xs text-red-500">
+                        Session code required
+                      </div>
+                    )}
+                  </div>
                   <motion.button
                     onClick={handleJoinByCode}
-                    className="px-6 py-3 bg-gradient-to-r from-primary to-primary-dark text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    disabled={!playerName.trim() || !sessionCode.trim()}
+                    className="px-6 py-3 bg-gradient-to-r from-primary to-primary-dark text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+                    whileHover={playerName.trim() && sessionCode.trim() ? { scale: 1.02 } : {}}
+                    whileTap={playerName.trim() && sessionCode.trim() ? { scale: 0.98 } : {}}
                   >
                     Join Session
                   </motion.button>
                 </div>
+                
+                {(!playerName.trim() || !sessionCode.trim()) && (
+                  <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      <ApperIcon name="Info" className="w-4 h-4 inline mr-1" />
+                      Please enter both your name and the session code to join.
+                    </p>
+                  </div>
+                )}
               </motion.div>
 
               {/* Available Sessions */}
@@ -389,15 +415,24 @@ export default function MultipLayerMode() {
                         </div>
                         
                         <div className="mt-4 sm:mt-0 sm:ml-4">
-                          <motion.button
-                            onClick={() => handleJoinSession(session.id)}
-                            disabled={session.participants >= session.maxParticipants}
-                            className="px-4 py-2 bg-gradient-to-r from-accent to-green-600 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                            whileHover={session.participants < session.maxParticipants ? { scale: 1.05 } : {}}
-                            whileTap={session.participants < session.maxParticipants ? { scale: 0.95 } : {}}
-                          >
-                            {session.participants >= session.maxParticipants ? 'Full' : 'Join'}
-                          </motion.button>
+                          {!playerName.trim() ? (
+                            <div className="text-center">
+                              <div className="px-4 py-2 bg-gray-100 text-gray-500 rounded-xl font-medium cursor-not-allowed">
+                                Enter name above
+                              </div>
+                              <div className="text-xs text-gray-400 mt-1">Name required to join</div>
+                            </div>
+                          ) : (
+                            <motion.button
+                              onClick={() => handleJoinSession(session.id)}
+                              disabled={session.participants >= session.maxParticipants}
+                              className="px-4 py-2 bg-gradient-to-r from-accent to-green-600 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                              whileHover={session.participants < session.maxParticipants ? { scale: 1.05 } : {}}
+                              whileTap={session.participants < session.maxParticipants ? { scale: 0.95 } : {}}
+                            >
+                              {session.participants >= session.maxParticipants ? 'Full' : 'Join Session'}
+                            </motion.button>
+                          )}
                         </div>
                       </div>
                     </motion.div>
