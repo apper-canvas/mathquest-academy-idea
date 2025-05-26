@@ -10,6 +10,9 @@ export default function ParentTeacherDashboard() {
   const [filterSubject, setFilterSubject] = useState('all')
   const [filterDifficulty, setFilterDifficulty] = useState('all')
   const [sortBy, setSortBy] = useState('performance')
+  const [filterGroup, setFilterGroup] = useState('all')
+  const [filterCompletion, setFilterCompletion] = useState('all')
+
   const [isLoading, setIsLoading] = useState(true)
   
   // Assignment Creation State
@@ -179,10 +182,36 @@ export default function ParentTeacherDashboard() {
 
   const filteredAndSortedStudents = studentsData
     .filter(student => {
+      // Subject filter
       if (filterSubject !== 'all') {
         const subjectPoints = filterSubject === 'math' ? student.mathPoints : student.sciencePoints
-        return subjectPoints > 0
+        if (subjectPoints <= 0) return false
       }
+      
+      // Difficulty filter (based on student level)
+      if (filterDifficulty !== 'all') {
+        const difficulty = parseInt(filterDifficulty)
+        if (difficulty === 1 && student.level > 3) return false
+        if (difficulty === 2 && (student.level <= 3 || student.level > 5)) return false
+        if (difficulty === 3 && student.level <= 5) return false
+      }
+      
+      // Group filter (based on performance ranges)
+      if (filterGroup !== 'all') {
+        if (filterGroup === 'high' && student.overallProgress < 85) return false
+        if (filterGroup === 'medium' && (student.overallProgress < 70 || student.overallProgress >= 85)) return false
+        if (filterGroup === 'low' && student.overallProgress >= 70) return false
+      }
+      
+      // Completion filter (based on assignment completion rates)
+      if (filterCompletion !== 'all') {
+        const completionRate = student.assignments.completed / (student.assignments.completed + student.assignments.pending + student.assignments.overdue)
+        if (filterCompletion === 'high' && completionRate < 0.8) return false
+        if (filterCompletion === 'medium' && (completionRate < 0.6 || completionRate >= 0.8)) return false
+        if (filterCompletion === 'low' && completionRate >= 0.6) return false
+        if (filterCompletion === 'overdue' && student.assignments.overdue === 0) return false
+      }
+      
       return true
     })
     .sort((a, b) => {
@@ -195,10 +224,15 @@ export default function ParentTeacherDashboard() {
           return a.name.localeCompare(b.name)
         case 'recent':
           return new Date(b.lastActive) - new Date(a.lastActive)
+        case 'accuracy':
+          return b.accuracy - a.accuracy
+        case 'level':
+          return b.level - a.level
         default:
           return 0
       }
     })
+
 
   if (isLoading) {
     return (
@@ -325,6 +359,40 @@ export default function ParentTeacherDashboard() {
             </select>
             
             <select
+              value={filterDifficulty}
+              onChange={(e) => setFilterDifficulty(e.target.value)}
+              className="px-3 py-2 rounded-lg border border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-900 dark:text-white text-sm"
+            >
+              <option value="all">All Levels</option>
+              <option value="1">Beginner (1-3)</option>
+              <option value="2">Intermediate (4-5)</option>
+              <option value="3">Advanced (6+)</option>
+            </select>
+            
+            <select
+              value={filterGroup}
+              onChange={(e) => setFilterGroup(e.target.value)}
+              className="px-3 py-2 rounded-lg border border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-900 dark:text-white text-sm"
+            >
+              <option value="all">All Groups</option>
+              <option value="high">High Performers (85%+)</option>
+              <option value="medium">Medium Performers (70-84%)</option>
+              <option value="low">Needs Support (<70%)</option>
+            </select>
+            
+            <select
+              value={filterCompletion}
+              onChange={(e) => setFilterCompletion(e.target.value)}
+              className="px-3 py-2 rounded-lg border border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-900 dark:text-white text-sm"
+            >
+              <option value="all">All Completion</option>
+              <option value="high">High Completion (80%+)</option>
+              <option value="medium">Medium Completion (60-79%)</option>
+              <option value="low">Low Completion (<60%)</option>
+              <option value="overdue">Has Overdue</option>
+            </select>
+            
+            <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="px-3 py-2 rounded-lg border border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-700 text-surface-900 dark:text-white text-sm"
@@ -333,8 +401,11 @@ export default function ParentTeacherDashboard() {
               <option value="points">By Points</option>
               <option value="name">By Name</option>
               <option value="recent">By Activity</option>
+              <option value="accuracy">By Accuracy</option>
+              <option value="level">By Level</option>
             </select>
           </div>
+
         </motion.div>
 
         {/* Tab Content */}
