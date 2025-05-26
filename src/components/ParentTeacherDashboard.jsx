@@ -388,7 +388,7 @@ export default function ParentTeacherDashboard() {
               <option value="all">All Completion</option>
               <option value="high">High Completion (80%+)</option>
               <option value="medium">Medium Completion (60-79%)</option>
-              <option value="low">Low Completion (<60%)</option>
+              <option value="low">Low Completion (&lt;60%)</option>
               <option value="overdue">Has Overdue</option>
             </select>
             
