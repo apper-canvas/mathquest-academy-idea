@@ -97,6 +97,7 @@ export default function Home() {
                   className="px-6 py-4 sm:px-8 sm:py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-2xl font-semibold text-lg shadow-card hover:shadow-soft transition-all duration-300"
                   whileHover={{ scale: 1.05, y: -3 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={() => window.location.href = '/multiplayer'}
                 >
                   Start Your Quest
                 </motion.button>
