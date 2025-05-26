@@ -41,6 +41,25 @@ export default function Home() {
                   className="w-5 h-5 text-surface-600 dark:text-surface-400" 
                 />
               </motion.button>
+              <motion.button
+                className="px-3 py-2 sm:px-4 sm:py-2 bg-gradient-to-r from-accent to-green-600 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-300 text-sm"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.location.href = '/multiplayer'}
+              >
+                <span className="hidden sm:inline">Multiplayer</span>
+                <span className="sm:hidden">MP</span>
+              </motion.button>
+              
+              <motion.button
+                className="px-3 py-2 sm:px-4 sm:py-2 bg-gradient-to-r from-purple-500 to-purple-700 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-300 text-sm"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.location.href = '/leaderboard'}
+              >
+                <span className="hidden sm:inline">Leaderboard</span>
+                <span className="sm:hidden">LB</span>
+              </motion.button>
               
               <motion.button
                 className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-primary to-primary-dark text-white rounded-xl font-medium hover:shadow-lg transition-all duration-300"

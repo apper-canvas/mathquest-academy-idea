@@ -9,6 +9,8 @@ export default function MainFeature() {
   const [score, setScore] = useState(0)
   const [level, setLevel] = useState(1)
   const [showResult, setShowResult] = useState(false)
+  const [multiplayerSession, setMultiplayerSession] = useState(null)
+  const [activeParticipants, setActiveParticipants] = useState(0)
   const [userProgress, setUserProgress] = useState({
     mathPoints: 0,
     sciencePoints: 0,
@@ -144,6 +146,25 @@ export default function MainFeature() {
           </h3>
           <p className="text-lg sm:text-xl text-surface-600 dark:text-surface-300 max-w-2xl mx-auto">
             Test your skills with our adaptive problem-solving system
+
+          {/* Multiplayer Session Indicator */}
+          {multiplayerSession && (
+            <motion.div
+              className="bg-accent/10 border border-accent/30 rounded-2xl p-4 mb-8 flex items-center justify-between"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-accent rounded-full animate-pulse"></div>
+                <span className="font-medium text-accent">Multiplayer Session Active</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <ApperIcon name="Users" className="w-5 h-5 text-accent" />
+                <span className="text-accent font-semibold">{activeParticipants} players online</span>
+              </div>
+            </motion.div>
+          )}
           </p>
         </motion.div>
 
