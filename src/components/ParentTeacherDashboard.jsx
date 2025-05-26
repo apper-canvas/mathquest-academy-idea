@@ -377,7 +377,7 @@ export default function ParentTeacherDashboard() {
               <option value="all">All Groups</option>
               <option value="high">High Performers (85%+)</option>
               <option value="medium">Medium Performers (70-84%)</option>
-              <option value="low">Needs Support (<70%)</option>
+              <option value="low">Needs Support (&lt;70%)</option>
             </select>
             
             <select
