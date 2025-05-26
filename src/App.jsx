@@ -6,6 +6,7 @@ import NotFound from './pages/NotFound'
 import MultipLayerMode from './components/MultipLayerMode'
 import Leaderboard from './components/Leaderboard'
 import TournamentManager from './components/TournamentManager'
+import ParentTeacherDashboard from './components/ParentTeacherDashboard'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/multiplayer" element={<MultipLayerMode />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/dashboard" element={<ParentTeacherDashboard />} />
         <Route path="/tournaments" element={<TournamentManager />} />
       </Routes>
       
